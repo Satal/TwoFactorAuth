@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Net;
 using System.Security.Cryptography;
 
-namespace MvcTFA
+namespace MvcTFA.Domain
 {
     public class GoogleAuthenticator
     {

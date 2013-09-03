@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcTFA", "MvcTFA\MvcTFA.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcTFA.Tests", "MvcTFA.Tests\MvcTFA.Tests.csproj", "{D01EA7D3-D11A-464D-9E69-DC8DDCADB2A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcTFA.Domain", "..\MvcTFA.Domain\MvcTFA.Domain.csproj", "{6BBD3DD1-8AD5-4BB0-A25D-7101979A6D67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{D01EA7D3-D11A-464D-9E69-DC8DDCADB2A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D01EA7D3-D11A-464D-9E69-DC8DDCADB2A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D01EA7D3-D11A-464D-9E69-DC8DDCADB2A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BBD3DD1-8AD5-4BB0-A25D-7101979A6D67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BBD3DD1-8AD5-4BB0-A25D-7101979A6D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BBD3DD1-8AD5-4BB0-A25D-7101979A6D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BBD3DD1-8AD5-4BB0-A25D-7101979A6D67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
