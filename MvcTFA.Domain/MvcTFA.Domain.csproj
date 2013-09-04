@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base32Encoder.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="GoogleAuthenticator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

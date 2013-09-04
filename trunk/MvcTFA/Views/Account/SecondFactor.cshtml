@@ -1,0 +1,20 @@
+﻿@model MvcTFA.Models.SecondFactorModel
+
+@{
+    ViewBag.Title = "Second factor";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div>
+        @Html.LabelFor(m => m.SecondFactor)
+        @Html.TextBoxFor(m => m.SecondFactor)
+        @Html.ValidationMessageFor(m => m.SecondFactor)
+    </div>
+    <div>
+        <input type="submit" value="Login"/>
+    </div>
+}

@@ -10,6 +10,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using MvcTFA.Filters;
 using MvcTFA.Models;
+using MvcTFA.Domain;
 
 namespace MvcTFA.Controllers
 {
@@ -17,6 +18,9 @@ namespace MvcTFA.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
+        private const string RememberMeTempDataKey = "RememberMe";
+        private const string CurrentUserTempDataKey = "CurrentUser";
+
         //
         // GET: /Account/Login
 
@@ -35,13 +39,64 @@ namespace MvcTFA.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
-            if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
+            if (ModelState.IsValid)
             {
-                return RedirectToLocal(returnUrl);
+                if (Membership.ValidateUser(model.UserName, model.Password))
+                {
+                    var profile = MvcTFAProfile.GetProfile(model.UserName);
+
+                    if (profile.UsesTwoFactorAuthentication)
+                    {
+                        TempData[CurrentUserTempDataKey] = profile;
+                        TempData[RememberMeTempDataKey] = model.RememberMe;
+                        return RedirectToAction("SecondFactor", new {returnUrl = returnUrl});
+                    }
+
+                    FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
+                    return RedirectToLocal(returnUrl);
+                }
             }
 
             // If we got this far, something failed, redisplay form
             ModelState.AddModelError("", "The user name or password provided is incorrect.");
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult SecondFactor(string returnUrl)
+        {
+            return View(new SecondFactorModel());
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult SecondFactor(SecondFactorModel model, string returnUrl)
+        {
+            var ga = new GoogleAuthenticator();
+
+            var user = TempData[CurrentUserTempDataKey] as MvcTFAProfile;
+            TempData.Keep();
+
+            if (user != null)
+            {
+                var secretKey = Base32Encoder.FromBase32String(user.SecretKey);
+
+                if (ga.GeneratePin(secretKey) == model.SecondFactor)
+                {
+                    var rememberMe = TempData[RememberMeTempDataKey] != null && (bool) TempData[RememberMeTempDataKey];
+                    FormsAuthentication.SetAuthCookie(user.UserName, rememberMe);
+                    return RedirectToLocal(returnUrl);
+                }
+
+                ModelState.AddModelError("SecondFactor", "The one time password you speccified is incorrect");
+            }
+            else
+            {
+                ModelState.AddModelError("", "A problem occurred while retrieving your session");
+            }
+
             return View(model);
         }
 
