@@ -1,0 +1,23 @@
+﻿@model MvcTFA.Models.UserProfileModel
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div>
+        @Html.LabelFor(m => m.UsesTwoFactor)
+        @Html.CheckBoxFor(m => m.UsesTwoFactor)
+        @Html.ValidationMessageFor(m => m.UsesTwoFactor)
+    </div>
+    <div>
+        The QR Code will go here eventually
+    </div>
+    <div>
+        <input type="submit" value="Update" />
+    </div>
+}

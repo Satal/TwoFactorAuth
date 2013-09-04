@@ -11,6 +11,7 @@ using WebMatrix.WebData;
 using MvcTFA.Filters;
 using MvcTFA.Models;
 using MvcTFA.Domain;
+using System.Configuration;
 
 namespace MvcTFA.Controllers
 {
@@ -96,6 +97,20 @@ namespace MvcTFA.Controllers
             {
                 ModelState.AddModelError("", "A problem occurred while retrieving your session");
             }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult UserProfile()
+        {
+            var model = new UserProfileModel();
+            var profile = MvcTFAProfile.GetCurrent();
+
+            // We need this to generate the QR code
+            model.AppName = ConfigurationManager.AppSettings["AppName"];
+            model.UsesTwoFactor = profile.UsesTwoFactorAuthentication;
+            model.SecretKey = profile.SecretKey;
 
             return View(model);
         }
