@@ -115,6 +115,19 @@ namespace MvcTFA.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserProfile(UserProfileModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var profile = MvcTFAProfile.GetCurrent();
+                profile.UsesTwoFactorAuthentication = model.UsesTwoFactor;
+            }
+
+            return View(model);
+        }
+
         //
         // POST: /Account/LogOff
 

@@ -1,4 +1,5 @@
-﻿@model MvcTFA.Models.UserProfileModel
+﻿@using MvcTFA.Helpers
+@model MvcTFA.Models.UserProfileModel
 
 @{
     ViewBag.Title = "Profile";
@@ -15,7 +16,8 @@
         @Html.ValidationMessageFor(m => m.UsesTwoFactor)
     </div>
     <div>
-        The QR Code will go here eventually
+        @Html.LabelFor(m => m.SecretKey)
+        @Html.QRCode(string.Format("otpauth://totp/{0}?secret={1}", Model.AppName, Model.SecretKey));
     </div>
     <div>
         <input type="submit" value="Update" />
