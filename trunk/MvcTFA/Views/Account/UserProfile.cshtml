@@ -17,7 +17,7 @@
     </div>
     <div>
         @Html.LabelFor(m => m.SecretKey)
-        @Html.QRCode(string.Format("otpauth://totp/{0}?secret={1}", Model.AppName, Model.SecretKey));
+        @Html.QRCode(string.Format("otpauth://totp/{0}?secret={1}", Model.AppName, Model.SecretKey))
     </div>
     <div>
         <input type="submit" value="Update" />

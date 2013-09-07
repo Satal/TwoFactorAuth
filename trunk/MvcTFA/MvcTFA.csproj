@@ -269,7 +269,9 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -318,7 +320,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MvcTFA.Domain\MvcTFA.Domain.csproj">
+    <ProjectReference Include="..\MvcTFA.Domain\MvcTFA.Domain.csproj">
       <Project>{6bbd3dd1-8ad5-4bb0-a25d-7101979a6d67}</Project>
       <Name>MvcTFA.Domain</Name>
     </ProjectReference>

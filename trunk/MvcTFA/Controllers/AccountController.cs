@@ -125,6 +125,9 @@ namespace MvcTFA.Controllers
                 profile.UsesTwoFactorAuthentication = model.UsesTwoFactor;
             }
 
+            // We need this to generate the QR code
+            model.AppName = ConfigurationManager.AppSettings["AppName"];
+
             return View(model);
         }
 
@@ -164,6 +167,11 @@ namespace MvcTFA.Controllers
                 {
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
                     WebSecurity.Login(model.UserName, model.Password);
+
+                    // Create the two factor secret key
+                    var profile = MvcTFAProfile.GetProfile(model.UserName);
+                    profile.SecretKey = Base32Encoder.ToBase32String(GoogleAuthenticator.GenerateSecretKey());
+
                     return RedirectToAction("Index", "Home");
                 }
                 catch (MembershipCreateUserException e)
