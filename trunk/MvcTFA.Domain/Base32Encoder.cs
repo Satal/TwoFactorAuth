@@ -14,7 +14,7 @@ namespace MvcTFA.Domain
         /// </summary>
         public static string ToBase32String(byte[] data)
         {
-
+            // Based on the code at http://stackoverflow.com/a/12398317/465404
             int i = 0, index = 0;
             var builder = new StringBuilder((data.Length + 7) * InByteSize / OutByteSize);
 
