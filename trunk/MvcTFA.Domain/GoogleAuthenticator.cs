@@ -7,6 +7,7 @@ namespace MvcTFA.Domain
 {
     public class GoogleAuthenticator
     {
+        // Based on the code at http://stackoverflow.com/a/12398317/465404
         const int IntervalLength = 30;
         const int PinLength = 6;
         static readonly int PinModulo = (int)Math.Pow(10, PinLength);
