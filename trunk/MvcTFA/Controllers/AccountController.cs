@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Transactions;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-using DotNetOpenAuth.AspNet;
+﻿using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
-using WebMatrix.WebData;
+using MvcTFA.Domain;
 using MvcTFA.Filters;
 using MvcTFA.Models;
-using MvcTFA.Domain;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
+using System.Transactions;
+using System.Web.Mvc;
+using System.Web.Security;
+using WebMatrix.WebData;
 
 namespace MvcTFA.Controllers
 {
@@ -135,13 +134,15 @@ namespace MvcTFA.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult UserProfile(UserProfileModel model)
         {
+            var profile = MvcTFAProfile.GetCurrent();
             if (ModelState.IsValid)
             {
-                var profile = MvcTFAProfile.GetCurrent();
                 profile.UsesTwoFactorAuthentication = model.UsesTwoFactor;
             }
 
-            // We need this to generate the QR code
+            // Make sure to include the secret key otherwise it can't be used for generating
+            // the QR code.
+            model.SecretKey = profile.SecretKey;
             model.AppName = ConfigurationManager.AppSettings["AppName"];
 
             return View(model);
