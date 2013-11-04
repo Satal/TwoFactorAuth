@@ -28,7 +28,7 @@ namespace MvcTFA.Domain
         /// <summary>
         /// Number of intervals that have elapsed.
         /// </summary>
-        static long CurrentInterval
+        public static long CurrentInterval
         {
             get
             {
@@ -64,7 +64,7 @@ namespace MvcTFA.Domain
         /// <summary>
         /// Generates a pin by hashing a key and counter.
         /// </summary>
-        static string GeneratePin(byte[] key, long counter)
+        public static string GeneratePin(byte[] key, long counter)
         {
             const int sizeOfInt32 = 4;
 

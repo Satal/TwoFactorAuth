@@ -75,18 +75,34 @@ namespace MvcTFA.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SecondFactor(SecondFactorModel model, string returnUrl)
         {
-            var ga = new GoogleAuthenticator();
-
             var user = TempData[CurrentUserTempDataKey] as MvcTFAProfile;
             TempData.Keep();
 
             if (user != null)
             {
                 var secretKey = Base32Encoder.FromBase32String(user.SecretKey);
+                var currentInterval = GoogleAuthenticator.CurrentInterval;
+                var secondFactorMatched = false;
 
-                if (ga.GeneratePin(secretKey) == model.SecondFactor)
+                // The currentInterval +- 1 has been added to allow for devices which are slightly out of sync
+                // to connect still, this does decrease the security of the application slightly but I feel that 
+                // the modification is an acceptable usability/security compromise.
+                if (GoogleAuthenticator.GeneratePin(secretKey, currentInterval) == model.SecondFactor)
                 {
-                    var rememberMe = TempData[RememberMeTempDataKey] != null && (bool) TempData[RememberMeTempDataKey];
+                    secondFactorMatched = true;
+                }
+                else if (GoogleAuthenticator.GeneratePin(secretKey, currentInterval + 1) == model.SecondFactor)
+                {
+                    secondFactorMatched = true;
+                }
+                else if (GoogleAuthenticator.GeneratePin(secretKey, currentInterval - 1) == model.SecondFactor)
+                {
+                    secondFactorMatched = true;
+                }
+
+                if (secondFactorMatched)
+                {
+                    var rememberMe = TempData[RememberMeTempDataKey] != null && (bool)TempData[RememberMeTempDataKey];
                     FormsAuthentication.SetAuthCookie(user.UserName, rememberMe);
                     return RedirectToLocal(returnUrl);
                 }
